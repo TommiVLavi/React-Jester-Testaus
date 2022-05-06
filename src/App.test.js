@@ -24,3 +24,33 @@ test('Adding something', () => {
   const cell = screen.getByText(/See you soon!/i);
   expect(cell).toBeInTheDocument();
 })
+
+test('Cleared everything out', () => {
+  render(<App />)
+
+  const adding = screen.getByText('Add');
+  const clearing = screen.getByText('Clear');
+  const desc = screen.getByPlaceholderText('Description');
+  const date = screen.getByPlaceholderText('Date');
+
+  fireEvent.change(desc, { target: { value: 'Cooking' }});
+  fireEvent.change(date, { target: { value: '10.02.2020' }});
+  fireEvent.click(adding);
+
+  fireEvent.change(desc, { target: { value: 'Zoom meeting' }});
+  fireEvent.change(date, { target: { value: '15.04.2020' }});
+  fireEvent.click(adding);
+
+  fireEvent.change(desc, { target: { value: 'Drinking tea' }});
+  fireEvent.change(date, { target: { value: '01.10.2021' }});
+  fireEvent.click(adding);
+
+  fireEvent.change(desc, { target: { value: 'Washing windows' }});
+  fireEvent.change(date, { target: { value: '25.07.2021' }});
+  fireEvent.click(adding);
+
+  fireEvent.click(clearing);
+
+  const row = screen.queryByText(/Washing windows/i);
+  expect(row).not.toBeInTheDocument;
+})
